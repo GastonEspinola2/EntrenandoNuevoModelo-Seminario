@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Predicción de raíces: y = 2x² - 3x + 1</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h2>Modelo para predecir las raíces de y = 2x² - 3x + 1</h2>
+    <button onclick="trainModel()">Entrenar modelo</button>
+    <p id="status">Esperando entrenamiento...</p>
+
+    <h3>Probar valor:</h3>
+    <input id="inputY" type="number" value="0" />
+    <button onclick="predictX()">Predecir x</button>
+    <p id="prediction"></p>
+
+    <script>
+      let model;
+
+      function generateData() {
+        const xs = [];
+        const ys = [];
+        for (let x = -2; x <= 3; x += 0.1) {
+          const y = 2 * x * x - 3 * x + 1;
+          xs.push(y); // entrada: y
+          ys.push(x); // salida esperada: x
+        }
+        return {
+          xs: tf.tensor2d(xs, [xs.length, 1]),
+          ys: tf.tensor2d(ys, [ys.length, 1]),
+        };
+      }
+
+      async function trainModel() {
+        model = tf.sequential();
+        model.add(
+          tf.layers.dense({ inputShape: [1], units: 64, activation: "relu" })
+        );
+        model.add(tf.layers.dense({ units: 64, activation: "relu" }));
+        model.add(tf.layers.dense({ units: 1 }));
+
+        model.compile({ optimizer: "adam", loss: "meanSquaredError" });
+
+        const { xs, ys } = generateData();
+
+        document.getElementById("status").innerText = "Entrenando...";
+
+        await model.fit(xs, ys, {
+          epochs: 100,
+          batchSize: 16,
+          callbacks: {
+            onEpochEnd: (epoch, logs) => {
+              document.getElementById("status").innerText = `Época ${
+                epoch + 1
+              }: pérdida = ${logs.loss.toFixed(4)}`;
+            },
+            onTrainEnd: () => {
+              document.getElementById("status").innerText =
+                "Entrenamiento finalizado.";
+            },
+          },
+        });
+      }
+
+      async function predictX() {
+        const inputY = parseFloat(document.getElementById("inputY").value);
+        if (!model) {
+          alert("Primero entrena el modelo.");
+          return;
+        }
+        const inputTensor = tf.tensor2d([inputY], [1, 1]);
+        const prediction = model.predict(inputTensor);
+        const value = await prediction.data();
+        document.getElementById(
+          "prediction"
+        ).innerText = `x ≈ ${value[0].toFixed(4)}`;
+      }
+    </script>
+  </body>
+</html>

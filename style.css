@@ -1,0 +1,64 @@
+ body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 20px;
+    }
+
+    h2 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #3498db;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    input {
+      padding: 8px 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-right: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    #status {
+      font-weight: bold;
+      margin-top: 20px;
+      color: #555;
+    }
+
+    .card {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .input-group {
+      margin-top: 20px;
+    }
